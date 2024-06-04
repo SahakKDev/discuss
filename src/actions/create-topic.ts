@@ -62,7 +62,7 @@ export async function createTopic(
         description: result.data.description,
       },
     });
-  } catch (error: unknown) {
+  } catch (error) {
     if (error instanceof Error) {
       return {
         errors: {
@@ -73,11 +73,11 @@ export async function createTopic(
 
     return {
       errors: {
-        _form: ["Something went wrong."],
+        _form: ["Failed to create topic."],
       },
     };
   }
 
-  revalidatePath("/");
+  revalidatePath(paths.home());
   redirect(paths.topicShow(topic.slug));
 }
