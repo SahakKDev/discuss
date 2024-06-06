@@ -6,6 +6,8 @@ interface Props {
 }
 
 export default async function PostShow({ postId }: Props) {
+  await new Promise((r) => setTimeout(r, 2500));
+
   const post = await prisma.post.findFirst({
     where: { id: postId },
   });

@@ -1,13 +1,17 @@
 import Image from "next/image";
 import CommentCreateForm from "@/components/comments/comment-create-form";
-import { CommentWithAuthor } from "@/db/queries/commects";
+import {
+  CommentWithAuthor,
+  fetchCommentsByPostId,
+} from "@/db/queries/commects";
 
 interface Props {
   commentId: string;
-  comments: CommentWithAuthor[];
+  postId: string;
 }
 
-export default function CommentShow({ commentId, comments }: Props) {
+export default async function CommentShow({ commentId, postId }: Props) {
+  const comments = await fetchCommentsByPostId(postId);
   const comment = comments.find((c) => c.id === commentId);
 
   if (!comment) {
@@ -16,9 +20,7 @@ export default function CommentShow({ commentId, comments }: Props) {
 
   const children = comments.filter((c) => c.parentId === commentId);
   const renderedChildren = children.map((child) => {
-    return (
-      <CommentShow key={child.id} commentId={child.id} comments={comments} />
-    );
+    return <CommentShow key={child.id} commentId={child.id} postId={postId} />;
   });
 
   return (
